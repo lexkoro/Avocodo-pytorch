@@ -13,6 +13,13 @@ from librosa.util import normalize
 from scipy.io.wavfile import read
 from torchaudio import transforms
 
+from audiomentations import (
+    Compose,
+    AddGaussianSNR,
+    ApplyImpulseResponse,
+    SevenBandParametricEQ,
+)
+
 MAX_WAV_VALUE = 32768.0
 
 MAX_WAV_VALUE = 32768.0
@@ -136,8 +143,8 @@ def custom_data_load(eval_split_size):
     # print("VCTK: ", len(vctk_wavs))
 
     wav_paths = (
-        gothic2_wavs
-        + gothic3_wavs
+gothic3_wavs 
++         gothic2_wavs
         + risen1_wavs
         + risen2_wavs
         + risen3_wavs
@@ -253,6 +260,14 @@ class MelDataset(torch.utils.data.Dataset):
             rolloff=0.99,
             dtype=torch.float32,
         )
+        self.augmentor = Compose(
+            [
+                AddGaussianSNR(min_snr_in_db=45, max_snr_in_db=65, p=0.25),
+                ApplyImpulseResponse(
+                    RIR_PATH, leave_length_unchanged=True, lru_cache_size=500, p=0.15
+                ),
+            ]
+        )
 
     def __getitem__(self, index):
         filename = self.audio_files[index]
@@ -283,7 +298,12 @@ class MelDataset(torch.utils.data.Dataset):
                     audio = torch.nn.functional.pad(audio, (0, self.segment_size - audio.size(1)), 'constant')
 
             audio_down = self.downsample(audio)
-
+            augmented_audio = audio_down.squeeze(0).cpu().float().numpy()
+            augmented_audio = self.augmentor(
+                samples=augmented_audio,
+                sample_rate=22050,
+            )
+            audio_down = torch.FloatTensor(augmented_audio).unsqueeze(0)
             mel = mel_spectrogram(audio_down, self.n_fft//2, self.num_mels,
                                   self.sampling_rate//2, self.hop_size//2, self.win_size//2, self.fmin, self.fmax,
                                   center=False)
