@@ -1,12 +1,13 @@
-import torch
-import torch.nn.functional as F
-import torch.nn as nn
-from torch.nn import Conv1d
-from torch.nn.utils import weight_norm, spectral_norm
-from utils import init_weights, get_padding
 import numpy as np
-
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 from scipy import signal as sig
+from torch.nn import Conv1d
+from torch.nn.utils import spectral_norm, weight_norm
+
+from .utils import get_padding, init_weights
+
 
 class CoMBD(torch.nn.Module):
 

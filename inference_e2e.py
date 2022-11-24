@@ -1,14 +1,17 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 
-import glob
-import os
-import numpy as np
 import argparse
+import glob
 import json
+import os
+
+import numpy as np
 import torch
-from scipy.io.wavfile import write
 from env import AttrDict
 from meldataset import MAX_WAV_VALUE
+from scipy.io.wavfile import write
+
 from models import Generator
 
 h = None
