@@ -8,17 +8,12 @@ from pathlib import Path
 import numpy as np
 import torch
 import torch.utils.data
+from audiomentations import (AddGaussianSNR, ApplyImpulseResponse, Compose,
+                             SevenBandParametricEQ)
 from librosa.filters import mel as librosa_mel_fn
 from librosa.util import normalize
 from scipy.io.wavfile import read
 from torchaudio import transforms
-
-from audiomentations import (
-    Compose,
-    AddGaussianSNR,
-    ApplyImpulseResponse,
-    SevenBandParametricEQ,
-)
 
 MAX_WAV_VALUE = 32768.0
 
