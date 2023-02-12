@@ -269,17 +269,7 @@ class CoMBD(torch.nn.Module):
             h.combd_op_g,
         ):
             self.blocks.append(
-                CoMBDBlock(
-                    _h_u,
-                    _d_k,
-                    _d_s,
-                    _d_d,
-                    _d_g,
-                    _d_p,
-                    _op_f,
-                    _op_k,
-                    _op_g,
-                )
+                CoMBDBlock(_h_u, _d_k, _d_s, _d_d, _d_g, _d_p, _op_f, _op_k, _op_g,)
             )
 
     def _block_forward(self, input, blocks, outs, f_maps):

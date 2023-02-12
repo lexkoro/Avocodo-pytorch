@@ -4,12 +4,13 @@
 #  MIT License (https://opensource.org/licenses/MIT)
 
 """."""
-'''
+"""
 Copied from https://github.com/jik876/hifi-gan/blob/master/utils.py
-'''
+"""
+
 
 def get_padding(kernel_size, dilation=1):
-    return int((kernel_size*dilation - dilation)/2)
+    return int((kernel_size * dilation - dilation) / 2)
 
 
 def init_weights(m, mean=0.0, std=0.01):
